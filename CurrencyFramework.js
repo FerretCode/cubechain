@@ -29,17 +29,29 @@ class CurrencyFramework {
 
       app.initialize();
 
+      console.log("local server initialized");
+
       ngrok.connect().then(url => {
         console.log("ngrok tunnel opened");
+
+        let json = JSON.parse(fs.readFileSync("./storage/currencyMeta.json"));
+
+        json.tag = this.tag;
+        json.name = this.name;
+        json.token = this.token;
+
+        fs.writeFileSync("./storage/currencyMeta.json", JSON.stringify(json, null, 2));
+
+        console.log("currency metadata saved");
 
         /**
          * Registers an account on the currency
          */
         app.request("/register", (req, res) => {
-          let users = JSON.parse(fs.readFileSync("./storage/users.json"));
+          console.log("new request to /register endpoint");
 
-          //dog.JSONPushKey(__dirname + "/storage/users.json", "users")
-        })
+          let users = JSON.parse(fs.readFileSync("./storage/users.json"));
+        });
       })
     };
   }
