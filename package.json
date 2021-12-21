@@ -4,5 +4,23 @@
     "ngrok": "",
     "dayjs": "",
     "my-dog-likes-cheese": ""
-  }
+  },
+  "name": "cubechain",
+  "description": "A centralized Docker container or cluster that regulates a digital currency",
+  "version": "1.0.0",
+  "main": "CurrencyFramework.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FerretCode/cubechain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FerretCode/cubechain/issues"
+  },
+  "homepage": "https://github.com/FerretCode/cubechain#readme"
 }
