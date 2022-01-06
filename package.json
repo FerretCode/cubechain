@@ -1,9 +1,11 @@
 {
   "dependencies": {
-    "millie": "",
-    "ngrok": "",
     "dayjs": "",
-    "my-dog-likes-cheese": ""
+    "dotenv": "^10.0.0",
+    "millie": "",
+    "my-cat-likes-firebase": "^1.0.9",
+    "my-dog-likes-cheese": "",
+    "ngrok": ""
   },
   "name": "cubechain",
   "description": "A centralized Docker container or cluster that regulates a digital currency",

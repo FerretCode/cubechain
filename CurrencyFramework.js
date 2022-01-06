@@ -1,7 +1,6 @@
 //dependencies
 const { millie } = require("millie");
 
-const ngrok = require("ngrok");
 const dog = require("my-dog-likes-cheese");
 const fs = require("fs");
 
@@ -23,36 +22,45 @@ class CurrencyFramework {
     this.token = options.token;
 
     this.initializeCurrency = () => {
-      const app = this.token ? new millie(3000, {
-        auth_secret: this.token
-      }) : new millie(3000);
+      const app = this.token
+        ? new millie(3000, {
+            auth_secret: this.token,
+          })
+        : new millie(3000);
 
       app.initialize();
 
       console.log("local server initialized");
 
-      ngrok.connect().then(url => {
-        console.log("ngrok tunnel opened");
+      let json = JSON.parse(fs.readFileSync("./storage/currencyMeta.json"));
 
-        let json = JSON.parse(fs.readFileSync("./storage/currencyMeta.json"));
+      json.tag = this.tag;
+      json.name = this.name;
+      json.token = this.token;
 
-        json.tag = this.tag;
-        json.name = this.name;
-        json.token = this.token;
+      fs.writeFileSync(
+        "./storage/currencyMeta.json",
+        JSON.stringify(json, null, 2)
+      );
 
-        fs.writeFileSync("./storage/currencyMeta.json", JSON.stringify(json, null, 2));
+      console.log("currency metadata saved");
 
-        console.log("currency metadata saved");
+      /**
+       * Registers an account on the currency
+       */
+      app.request("/register", (req, res) => {
+        console.log("new request to /register endpoint");
 
-        /**
-         * Registers an account on the currency
-         */
-        app.request("/register", (req, res) => {
-          console.log("new request to /register endpoint");
+        let users = JSON.parse(fs.readFileSync("./storage/users.json"));
+        let name = req.getHeader("username");
+        let securityCode = req.getHeader("security-code");
 
-          let users = JSON.parse(fs.readFileSync("./storage/users.json"));
-        });
-      })
+        if(!name || !securityCode) return res.respond("You need to provide a security-code and a username!")
+      });
     };
   }
 }
+
+module.exports = {
+  CurrencyFramework,
+};
