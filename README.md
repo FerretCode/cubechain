@@ -3,6 +3,8 @@
 
 A digital currency regulated by a Docker container and accessable via a REST API
 
+Similar to a cryptocurrency, cubechain is digital. However, unlike crypto, it's not decentralized and instead managed by a server. 
+
 
 ## Features 📜
 
