@@ -1,10 +1,8 @@
-
 # cubechain 📦
 
 A digital currency regulated by a Docker container and accessable via a REST API
 
-Similar to a cryptocurrency, cubechain is digital. However, unlike crypto, it's not decentralized and instead managed by a server. 
-
+Similar to a cryptocurrency, cubechain is digital. However, unlike crypto, it's not decentralized and instead managed by a server.
 
 ## Features 📜
 
@@ -16,7 +14,7 @@ Similar to a cryptocurrency, cubechain is digital. However, unlike crypto, it's 
 
 ## Usage 💻
 
-An ideal configuration of a cubechain would be to have multiple Docker containers linked via container orchestration using Kubernetes or Nomad. The cubechain Docker containers can run in either server or client mode, where servers will automatically manage clients, replicate data between each other, count running operations in each client and act as a proxy to low-traffic client containers.
+An ideal configuration of a cubechain would be to have multiple Docker containers linked via container orchestration using Kubernetes or Nomad. The cubechain Docker containers can run in either server or client mode, where servers will automatically manage clients count running operations in each client and act as a proxy to low-traffic client containers, and clients will run jobs specified by the server and send state to the server for processing.
 
 To set up a currency, you can provide a server container with a currency configuration file which it will replicate across clients. If you were to check the server container logs, you should see messages stating that the network has been set up.
 
