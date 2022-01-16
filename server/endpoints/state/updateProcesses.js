@@ -9,7 +9,7 @@ module.exports.updateProcess = (req, res, storage) => {
     healthy: true,
   });
 
-  storage.clients[uid].processCount += update;
+  storage.clients[uid].processCount += processCount;
 
   //respond to request to let client know if request succeeded
   res.respond(200, {
