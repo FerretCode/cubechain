@@ -18,7 +18,7 @@ class ClientTransmitter {
       try {
         let request = require(`../requests/${req}`);
 
-        request.run(...params);
+        request.run(this.address, ...params);
       } catch (err) {
         console.error(`Request ${req} failed to run!`);
       }

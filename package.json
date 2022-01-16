@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "axios": "^0.24.0",
     "dayjs": "",
     "dotenv": "^10.0.0",
     "millie": "",
