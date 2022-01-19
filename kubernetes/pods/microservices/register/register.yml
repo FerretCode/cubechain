@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: register
+spec:
+  containers:
+    - name: register
+      image: a
+      ports:
+        - containerPort: 3000
