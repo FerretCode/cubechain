@@ -1,4 +1,5 @@
 FROM node:17-alpine
-ADD ./ /usr/register
+COPY . /usr/register
+WORKDIR /usr/register
 RUN ["npm", "install"]
 CMD [ "node", "." ]

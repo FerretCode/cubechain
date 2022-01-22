@@ -5,6 +5,6 @@ metadata:
 spec:
   containers:
     - name: register
-      image: a
+      image: sthanguy/cubechain-register-microservice
       ports:
-        - containerPort: 3000
+        - containerPort: 3005

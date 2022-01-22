@@ -1,3 +1,8 @@
-const millie = require("millie");
+const { millie } = require("millie");
 const { MyCatLikesFirebaseServer } = require("my-cat-likes-firebase");
-const axios = require("axios").default;
+
+const app = new millie(3005).initialize();
+
+app.request("/api/register", (req, res) => {
+  res.respond(200, "HI!!!!");
+});
