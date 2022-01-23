@@ -9,7 +9,7 @@ const fs = require("fs");
 
 const app = new millie(3006).initialize();
 const firestore = new MyCatLikesFirebaseServer({
-  firebaseCredentialsPath: "./config/FIREBASE_CONFIG",
+  firebaseCredentialsPath: "./config/firebase/FIREBASE_CONFIG",
   loggingEnabled: true,
 }).initialize();
 
@@ -49,7 +49,7 @@ app.request("/api/register", (req, res) => {
                 exp: day().add("1", "day").unix(),
                 jti: uuidv4(),
               },
-              fs.readFileSync("./config/SIGNING_SECRET")
+              fs.readFileSync("./config/jwt/SIGNING_SECRET")
             );
 
             res.respond(200, {

@@ -22,10 +22,10 @@ spec:
             - containerPort: 3005
           volumeMounts:
             - name: firebase-config
-              mountPath: "/usr/register/config"
+              mountPath: "/usr/register/config/firebase"
               readOnly: true
             - name: signing-secret
-              mountPath: "/usr/register/config"
+              mountPath: "/usr/register/config/jwt"
               readOnly: true
       volumes:
         - name: firebase-config
