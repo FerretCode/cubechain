@@ -16,6 +16,21 @@ spec:
     spec:
       containers:
         - name: register-microservice
-          image: sthanguy/cubechain-register-microservice
+          image: sthanguy/cubechain-register-microservice:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3005
+          volumeMounts:
+            - name: firebase-config
+              mountPath: "/usr/register/config"
+              readOnly: true
+            - name: signing-secret
+              mountPath: "/usr/register/config"
+              readOnly: true
+      volumes:
+        - name: firebase-config
+          secret:
+            secretName: firebase-config
+        - name: signing-secret
+          secret:
+            secretName: signing-secret
