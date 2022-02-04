@@ -18,10 +18,9 @@ app.request("/api/register", (req, res) => {
 
   firestore
     .getDoc(`users/${uid}`)
-    .then(() => {
-      res.respond(500, "Unique ID already exists");
-    })
-    .catch(() => {
+    .then((data) => {
+      if (data) res.respond(500, "Unique ID already exists");
+
       let username = req.headers["username"];
       let password = req.headers["password"];
 
@@ -35,6 +34,10 @@ app.request("/api/register", (req, res) => {
               balance: 0,
               username,
               hash,
+              permissons: {
+                admin: false,
+                canMint: false,
+              },
               registration: day().valueOf(),
               transactions: [],
             },
@@ -64,5 +67,8 @@ app.request("/api/register", (req, res) => {
             res.respond(500, "Internal server error");
           });
       });
+    })
+    .catch(() => {
+      res.respond(500, "Internal server error");
     });
 });

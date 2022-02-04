@@ -14,7 +14,7 @@
     "dayjs": "^1.10.7",
     "jsonwebtoken": "^8.5.1",
     "millie": "^1.2.1",
-    "my-cat-likes-firebase": "",
+    "my-cat-likes-firebase": "^1.2.0",
     "uuid": "^8.3.2"
   }
 }
