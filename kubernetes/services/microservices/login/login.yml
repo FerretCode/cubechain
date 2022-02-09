@@ -9,4 +9,4 @@ spec:
     - port: 3005
       protocol: TCP
   selector:
-    run: login-microservice-pod
+    app: login-microservice
