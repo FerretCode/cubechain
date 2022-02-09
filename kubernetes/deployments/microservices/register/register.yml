@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: register-microservice
   labels:
-    app: register
+    app: register-microservice
 spec:
   replicas: 6
   selector:
