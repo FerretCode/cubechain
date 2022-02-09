@@ -7,28 +7,29 @@ const day = require("dayjs");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const app = new millie(3005).initialize();
+const app = new millie(3005);
+app.initialize();
 const firestore = new MyCatLikesFirebaseServer({
   firebaseCredentialsPath: "./config/firebase/FIREBASE_CONFIG",
   loggingEnabled: true,
 }).initialize();
 
 app.request("/api/login", (req, res) => {
+  let username = req.headers["username"];
+  let password = req.headers["password"];
+
+  if (!username || !password)
+    return res.respond(400, "Missing either password or username!");
+
   firestore
     .getDoc(`users/${req.headers["uid"]}`)
     .then((data) => {
-      if (!data) res.respond(500, "Unique ID does not exist");
-
-      let username = req.headers["username"];
-      let password = req.headers["password"];
-
-      if (!username || !password)
-        return res.respond(400, "Missing either password or username!");
+      if (!data) res.respond(400, "Unique ID does not exist");
 
       if (bcrypt.compareSync(password, data.hash)) {
         let authKey = jwt.sign(
           {
-            sub: uid,
+            sub: req.headers["uid"],
             username,
             iat: day().unix(),
             exp: day().add("1", "day").unix(),
@@ -39,7 +40,7 @@ app.request("/api/login", (req, res) => {
 
         res.respond(200, {
           message: "User successfully logged in",
-          uid,
+          uid: req.headers["uid"],
           authKey,
         });
       } else {
@@ -48,7 +49,9 @@ app.request("/api/login", (req, res) => {
         });
       }
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error(err);
+
       res.respond(500, "Internal server error");
     });
 });

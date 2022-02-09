@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: register-service
+  name: register-microservice-pod
+  labels:
+    run: register-microservice-pod
 spec:
-  selector:
-    app: register
-  type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 3005
-      targetPort: 3005
+    - port: 3005
+      protocol: TCP
+  selector:
+    run: register-microservice-pod

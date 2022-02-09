@@ -7,7 +7,8 @@ const day = require("dayjs");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const app = new millie(3005).initialize();
+const app = new millie(3005);
+app.initialize();
 const firestore = new MyCatLikesFirebaseServer({
   firebaseCredentialsPath: "./config/firebase/FIREBASE_CONFIG",
   loggingEnabled: true,

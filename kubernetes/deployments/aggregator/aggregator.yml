@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-aggregator
+  labels:
+    app: aggregator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator
+  template:
+    metadata:
+      labels:
+        app: aggregator
+    spec:
+      containers:
+        - name: api-aggregator
+          image: sthanguy/cubechain-api-aggregator:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3005
