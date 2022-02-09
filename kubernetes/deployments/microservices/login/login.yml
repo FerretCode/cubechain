@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: login-microservice
   labels:
-    app: login
+    app: login-microservice
 spec:
   replicas: 6
   selector:
