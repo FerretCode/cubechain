@@ -8,35 +8,37 @@ app.server.on("request", (req, res) => {
 
   try {
     if (req.method === "POST") {
+      console.log(req.url.slice(req.url.lastIndexOf("/") + 1).toUpperCase());
+
       console.log(
-        `${
+        `http://${
           process.env[
             `${req.url
               .slice(req.url.lastIndexOf("/") + 1)
-              .toUpperCase()}_MICROSERVICE_POD_SERVICE_HOST`
+              .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
           ]
         }:${
           process.env[
             `${req.url
               .slice(req.url.lastIndexOf("/") + 1)
-              .toUpperCase()}_MICROSERVICE_POD_SERVICE_PORT`
+              .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
           ]
         }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`
       );
 
       axios
         .post(
-          `${
+          `http://${
             process.env[
               `${req.url
                 .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_POD_SERVICE_HOST`
+                .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
             ]
           }:${
             process.env[
               `${req.url
                 .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_POD_SERVICE_PORT`
+                .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
             ]
           }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`,
           {},
@@ -47,29 +49,25 @@ app.server.on("request", (req, res) => {
           }
         )
         .then((data) => {
-          console.log(data);
-
           res.respond(200, data.data);
         })
         .catch((err) => {
-          console.error(err);
-
-          res.respond(500, "Internal server error");
+          if (err.response) res.respond(err.response.status, err.response.data);
         });
     } else {
       axios
         .get(
-          `${
+          `http://${
             process.env[
               `${req.url
                 .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_POD_SERVICE_HOST`
+                .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
             ]
           }:${
             process.env[
               `${req.url
                 .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_POD_SERVICE_PORT`
+                .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
             ]
           }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`,
           {
@@ -84,9 +82,7 @@ app.server.on("request", (req, res) => {
           res.respond(200, data.data);
         })
         .catch((err) => {
-          console.error(err);
-
-          res.respond(500, "Internal server error");
+          if (err.response) res.respond(err.response.status, err.response.data);
         });
     }
   } catch (error) {
