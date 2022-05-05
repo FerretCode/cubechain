@@ -7,82 +7,36 @@ app.server.on("request", (req, res) => {
   if (!req.url) return;
 
   try {
-    if (req.method === "POST") {
-      console.log(req.url.slice(req.url.lastIndexOf("/") + 1).toUpperCase());
+    req.method === "POST" ? post() : get();
 
-      console.log(
-        `http://${
-          process.env[
-            `${req.url
-              .slice(req.url.lastIndexOf("/") + 1)
-              .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
-          ]
-        }:${
-          process.env[
-            `${req.url
-              .slice(req.url.lastIndexOf("/") + 1)
-              .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
-          ]
-        }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`
-      );
+    const endpoint = req.url.slice(req.url.lastIndexOf("/" + 1)).toUpperCase();
 
+    function post() {
       axios
         .post(
-          `http://${
-            process.env[
-              `${req.url
-                .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
-            ]
-          }:${
-            process.env[
-              `${req.url
-                .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
-            ]
-          }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`,
+          `${endpoint}_MICROSERVICE_SERVICE_HOST:${endpoint}_MICROSERVICE_SERVICE_PORT/api/${endpoint.toLowerCase()}`,
           {},
-          {
-            headers: {
-              ...req.headers,
-            },
-          }
+          { headers: { ...req.headers } }
         )
-        .then((data) => {
-          res.respond(200, data.data);
-        })
+        .then((data) => res.respond(200, data.data))
         .catch((err) => {
           if (err.response) res.respond(err.response.status, err.response.data);
         });
-    } else {
+    }
+
+    function get() {
       axios
-        .get(
-          `http://${
-            process.env[
-              `${req.url
-                .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_SERVICE_HOST`
-            ]
-          }:${
-            process.env[
-              `${req.url
-                .slice(req.url.lastIndexOf("/") + 1)
-                .toUpperCase()}_MICROSERVICE_SERVICE_PORT`
-            ]
-          }/api/${req.url.slice(req.url.lastIndexOf("/") + 1)}`,
+        .post(
+          `${endpoint}_MICROSERVICE_SERVICE_HOST:${endpoint}_MICROSERVICE_SERVICE_PORT/api/${endpoint.toLowerCase()}`,
+          {},
           {
-            headers: {
-              ...req.headers,
-            },
+            headers: { ...req.headers },
           }
         )
-        .then((data) => {
-          console.log(data);
-
-          res.respond(200, data.data);
-        })
+        .then((data) => res.respond(200, data.data))
         .catch((err) => {
-          if (err.response) res.respond(err.response.status, err.response.data);
+          if (err.response)
+            res.respond(err.response.status, err.response.status);
         });
     }
   } catch (error) {

@@ -17,9 +17,10 @@ const firestore = new MyCatLikesFirebaseServer({
 app.request("/api/login", (req, res) => {
   let username = req.headers["username"];
   let password = req.headers["password"];
+  let uid = req.headers["uid"];
 
-  if (!username || !password)
-    return res.respond(400, "Missing either password or username!");
+  if (!username || !password || !uid)
+    return res.respond(400, "Missing either password, uid, or username!");
 
   firestore
     .getDoc(`users/${req.headers["uid"]}`)
