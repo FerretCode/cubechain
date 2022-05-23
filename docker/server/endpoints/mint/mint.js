@@ -12,7 +12,9 @@ app.initialize();
 const firestore = new MyCatLikesFirebaseServer({
   firebaseCredentialsPath: "./config/firebase/FIREBASE_CONFIG",
   loggingEnabled: true,
-}).initialize();
+});
+
+firestore.initialize();
 
 app.request("/api/login", (req, res) => {
   let token = req.headers["token"];
@@ -23,8 +25,31 @@ app.request("/api/login", (req, res) => {
   jwt.verify(
     token,
     fs.readFileSync("./config/jwt/SIGNING_SECRET"),
-    (err, decoded) => {
+    async (err, decoded) => {
       if (err) return res.respond(403, "Invalid token!");
+
+      const genesis = await firestore
+        .getDoc("mint_records/genesis")
+        .catch((err) => res.respond(500, "Internal server error!"));
+
+      await firestore
+        .createOrUpdateDoc(
+          {
+            balance: (genesis.balance || 0) + balance,
+            writer: {
+              uid: decoded.sub,
+              username: decoded.username,
+            },
+          },
+          "mint_records/genesis"
+        )
+        .catch((err) => {
+          console.error(err);
+
+          return res.respond(500, "Internal server error!");
+        });
+
+      res.respond(200, "Minted successfully!");
     }
   );
 });
