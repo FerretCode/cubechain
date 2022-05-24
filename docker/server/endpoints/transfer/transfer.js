@@ -17,8 +17,9 @@ const firestore = new MyCatLikesFirebaseServer({
 firestore.initialize();
 
 app.request("/api/login", (req, res) => {
-  let token = req.headers["token"];
-  let amount = req.headers["amount"];
+  const token = req.headers["token"];
+  const amount = req.headers["amount"];
+  const uid = req.headers["recipient"];
 
   if (!token) return res.respond(400, "Missing auth token!");
 
@@ -28,35 +29,33 @@ app.request("/api/login", (req, res) => {
     async (err, decoded) => {
       if (err) return res.respond(403, "Invalid token!");
 
-      const genesis = await firestore
-        .getDoc("mint_records/genesis")
-        .catch((err) => res.respond(500, "Internal server error!"));
-
       const user = await firestore
         .getDoc(`users/${decoded.sub}`)
         .catch((err) => res.respond(500, "Internal server error!"));
 
-      if (!user.permissions.canMint)
-        return res.respond(403, "No permission to mint!");
+      const recipient = await firestore.getDoc(`users/${uid}`).catch((err) => {
+        console.error(err);
+        return res.respond(500, "There was an error fetching the recipient!");
+      });
 
-      await firestore
-        .createOrUpdateDoc(
-          {
-            balance: (genesis.balance || 0) + balance,
-            writer: {
-              uid: decoded.sub,
-              username: decoded.username,
-            },
-          },
-          "mint_records/genesis"
-        )
-        .catch((err) => {
-          console.error(err);
+      if (!recipient || !user)
+        return res.respond(
+          500,
+          "There was an issue fetching either you or the recipient!"
+        );
 
-          return res.respond(500, "Internal server error!");
-        });
+      if (user.balance < amount)
+        return res.respond(
+          403,
+          "Your balance is not high enough to make this transaction!"
+        );
 
-      res.respond(200, "Minted successfully!");
+      await firestore.updateDoc(
+        {
+          balance: recipient.balance + amount,
+        },
+        `users/${uid}`
+      );
     }
   );
 });

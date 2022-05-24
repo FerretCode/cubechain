@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mint-microservice-pod
+  labels:
+    run: mint-microservice-pod
+spec:
+  ports:
+    - port: 3005
+      protocol: TCP
+  selector:
+    app: mint-microservice

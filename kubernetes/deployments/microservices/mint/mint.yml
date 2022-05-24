@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mint-microservice
+  labels:
+    app: mint-microservice
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: mint
+  template:
+    metadata:
+      labels:
+        app: mint
+    spec:
+      containers:
+        - name: mint-microservice
+          image: sthanguy/cubechain-mint-microservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3005
+          volumeMounts:
+            - name: firebase-config
+              mountPath: "/usr/mint/config/firebase"
+              readOnly: true
+            - name: signing-secret
+              mountPath: "/usr/mint/config/jwt"
+              readOnly: true
+      volumes:
+        - name: firebase-config
+          secret:
+            secretName: firebase-config
+        - name: signing-secret
+          secret:
+            secretName: signing-secret
